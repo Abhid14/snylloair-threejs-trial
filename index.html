@@ -21,6 +21,11 @@
     <div id="canvas-container"></div>
 
     <script type="module">
+        // Helper function to detect if the device is mobile
+        function isMobile() {
+            const isMobileDevice = typeof window.orientation !== 'undefined' || navigator.userAgent.indexOf('IEMobile') !== -1;
+            return isMobileDevice;
+        }
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -39,13 +44,13 @@
 
         // Add model to the scene
         const loader = new GLTFLoader();
-        loader.load('./a.gltf', function (gltf) {
+        loader.load('/a.gltf', function (gltf) {
             const model = gltf.scene;
 
             // Set initial rotation
-          //  model.rotation.x = Math.PI / 2;
+            //  model.rotation.x = Math.PI / 2;
             model.rotation.y = Math.PI / -3;
-        //    model.rotation.z = -;
+            //    model.rotation.z = -;
 
             scene.add(model);
         });
@@ -53,8 +58,11 @@
         // Create controls
         const controls = new OrbitControls(camera, renderer.domElement);
 
-        // Set initial camera position
-        camera.position.z = 5;
+        if (isMobile()) {
+            camera.position.z = 8;
+        } else {
+            camera.position.z = 5;
+        }
 
         // Add lighting
         const light1 = new THREE.DirectionalLight(0xffffff, 1);
@@ -64,6 +72,9 @@
         const light2 = new THREE.DirectionalLight(0xffffff, 1);
         light2.position.set(-1, 1, 1);
         scene.add(light2);
+
+        renderer.setClearColor("#3b3b3b"); // Set to gray (hex color code)
+
 
         // Render the scene
         function animate() {
