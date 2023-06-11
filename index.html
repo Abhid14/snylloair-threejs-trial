@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>3D Model Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container"></div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+        // Define variables
+        let scene, camera, renderer;
+
+        // Create scene, camera, and renderer
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+
+        // Set renderer size and add to container
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Add model to the scene
+        const loader = new GLTFLoader();
+        loader.load('a.gltf', function (gltf) {
+            const model = gltf.scene;
+
+            // Set initial rotation
+          //  model.rotation.x = Math.PI / 2;
+            model.rotation.y = Math.PI / -3;
+        //    model.rotation.z = -;
+
+            scene.add(model);
+        });
+
+        // Create controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+
+        // Set initial camera position
+        camera.position.z = 5;
+
+        // Add lighting
+        const light1 = new THREE.DirectionalLight(0xffffff, 1);
+        light1.position.set(1, 1, 1);
+        scene.add(light1);
+
+        const light2 = new THREE.DirectionalLight(0xffffff, 1);
+        light2.position.set(-1, 1, 1);
+        scene.add(light2);
+
+        // Render the scene
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+
+</html>
